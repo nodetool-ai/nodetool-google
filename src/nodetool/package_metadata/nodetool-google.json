@@ -1,0 +1,752 @@
+{
+  "name": "nodetool-google",
+  "description": "Nodetool Google nodes",
+  "version": "0.1.0",
+  "authors": [
+    "Matthias Georgi <matti.georgi@gmail.com>"
+  ],
+  "nodes": [
+    {
+      "title": "Add Label",
+      "description": "Adds a label to a Gmail message.\n    email, gmail, label",
+      "namespace": "google.mail",
+      "node_type": "google.mail.AddLabel",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "email",
+          "type": {
+            "type": "email"
+          },
+          "default": {},
+          "title": "Email",
+          "description": "Email message to label"
+        },
+        {
+          "name": "label",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Label",
+          "description": "Label to add to the message"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "email"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "email",
+        "label"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Gmail Search",
+      "description": "Searches Gmail using Gmail-specific search operators.\n    email, gmail, search\n\n    Use cases:\n    - Search for emails based on specific criteria\n    - Retrieve emails from a specific sender\n    - Filter emails by subject, sender, or date",
+      "namespace": "google.mail",
+      "node_type": "google.mail.GmailSearch",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "from_address",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "From Address",
+          "description": "Sender's email address to search for"
+        },
+        {
+          "name": "to_address",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "To Address",
+          "description": "Recipient's email address to search for"
+        },
+        {
+          "name": "subject",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Subject",
+          "description": "Text to search for in email subject"
+        },
+        {
+          "name": "body",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Body",
+          "description": "Text to search for in email body"
+        },
+        {
+          "name": "date_filter",
+          "type": {
+            "type": "enum",
+            "values": [
+              "SINCE_ONE_HOUR",
+              "SINCE_ONE_DAY",
+              "SINCE_ONE_WEEK",
+              "SINCE_ONE_MONTH",
+              "SINCE_ONE_YEAR"
+            ],
+            "type_name": "nodetool.nodes.google.mail.DateFilter"
+          },
+          "default": "SINCE_ONE_DAY",
+          "title": "Date Filter",
+          "description": "Date filter to search for"
+        },
+        {
+          "name": "keywords",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Keywords",
+          "description": "Custom keywords or labels to search for"
+        },
+        {
+          "name": "folder",
+          "type": {
+            "type": "enum",
+            "values": [
+              "INBOX",
+              "[Gmail]/Sent Mail",
+              "[Gmail]/Drafts",
+              "[Gmail]/Spam",
+              "[Gmail]/Trash"
+            ],
+            "type_name": "nodetool.nodes.google.mail.GmailFolder"
+          },
+          "default": "INBOX",
+          "title": "Folder",
+          "description": "Email folder to search in"
+        },
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "General text to search for anywhere in the email"
+        },
+        {
+          "name": "max_results",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Max Results",
+          "description": "Maximum number of emails to return"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "email"
+              }
+            ]
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "subject",
+        "body",
+        "date_filter",
+        "max_results"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Move To Archive",
+      "description": "Moves specified emails to Gmail archive.\n    email, gmail, archive",
+      "namespace": "google.mail",
+      "node_type": "google.mail.MoveToArchive",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "message_ids",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Message Ids",
+          "description": "List of message IDs to archive"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "str"
+              }
+            ]
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "message_ids"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Gemini",
+      "description": "Generate text using Gemini.\n    google, llm, chat, vision, multimodal",
+      "namespace": "google.gemini",
+      "node_type": "google.gemini.Gemini",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-1.5-pro",
+          "title": "Model"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt"
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "History of messages to send to the model."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Image to use for generation"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "Audio to use for generation"
+        },
+        {
+          "name": "system_instruction",
+          "type": {
+            "type": "str"
+          },
+          "default": "You are a helpful assistant.",
+          "title": "System Instruction",
+          "description": "Instructions for the model to steer it toward better performance.\n        For example, \"Answer as concisely as possible\" or \"Don't use technical\n        terms in your response\".\n        "
+        },
+        {
+          "name": "code_execution",
+          "type": {
+            "type": "bool"
+          },
+          "default": false,
+          "title": "Code Execution",
+          "description": "Whether to enable code execution tool. \n        You can use this code execution capability to build applications that \n        benefit from code-based reasoning and that produce text output.\n        "
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.5,
+          "title": "Temperature",
+          "description": "Value that controls the degree of randomness in token selection.\n        Lower temperatures are good for prompts that require a less open-ended or\n        creative response, while higher temperatures can lead to more diverse or\n        creative results.\n        "
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.5,
+          "title": "Top P",
+          "description": "Tokens are selected from the most to least probable until the sum\n        of their probabilities equals this value. Use a lower value for less\n        random responses and a higher value for more random responses.\n        "
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "float"
+          },
+          "default": 40,
+          "title": "Top K",
+          "description": "For each token selection step, the ``top_k`` tokens with the\n        highest probabilities are sampled. Then tokens are further filtered based\n        on ``top_p`` with the final token selected using temperature sampling. Use\n        a lower number for less random responses and a higher number for more\n        random responses.\n        ",
+          "min": 1.0,
+          "max": 50.0
+        },
+        {
+          "name": "max_output_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 1024,
+          "title": "Max Output Tokens",
+          "description": "Maximum number of tokens that can be generated in the response.\n      "
+        },
+        {
+          "name": "presence_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Presence Penalty",
+          "description": "Positive values penalize tokens that already appear in the\n        generated text, increasing the probability of generating more diverse\n        content.\n        "
+        },
+        {
+          "name": "frequency_penalty",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Frequency Penalty",
+          "description": "Positive values penalize tokens that repeatedly appear in the\n        generated text, increasing the probability of generating more diverse\n        content.\n        "
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "model",
+        "prompt",
+        "messages",
+        "image",
+        "audio",
+        "system_instruction",
+        "code_execution",
+        "temperature",
+        "top_p",
+        "top_k",
+        "max_output_tokens",
+        "presence_penalty",
+        "frequency_penalty"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Chain Of Thought",
+      "description": "Gemini version of chain-of-thought reasoning node for breaking down complex problems into clear steps.\n    agent, reasoning, analysis, problem-solving\n    Use cases:\n    - Analyzing complex problems step by step\n    - Breaking down solutions into logical steps\n    - Providing detailed reasoning for decisions",
+      "namespace": "google.agents",
+      "node_type": "google.agents.ChainOfThought",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "The messages to analyze"
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-2.0-flash-exp",
+          "title": "Model"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "dict"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "messages"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Data Generator",
+      "description": "Gemini version of the data generator for creating dataframes based on user prompts. Supports multimodal inputs including images and audio.\n    data, generator, dataframe, multimodal\n    Use cases:\n    - Creating a dataset for a machine learning model\n    - Creating a dataset for a data visualization\n    - Creating a dataset for a data analysis",
+      "namespace": "google.agents",
+      "node_type": "google.agents.DataGenerator",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-2.0-flash-exp",
+          "title": "Model",
+          "description": "The Gemini model to use"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The user prompt"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Image to use for generation"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "Audio to use for generation"
+        },
+        {
+          "name": "columns",
+          "type": {
+            "type": "record_type"
+          },
+          "default": {},
+          "title": "Columns",
+          "description": "The columns to use in the dataframe"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "Temperature for sampling",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "dataframe"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "image",
+        "audio",
+        "columns"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Gemini Agent",
+      "description": "Gemini version of the Agent node for task planning and goal decomposition.\n    agent, planning, task, decomposition\n    Use cases:\n    - Breaking down complex tasks into smaller steps\n    - Creating task dependencies and workflows\n    - Planning multi-step processes",
+      "namespace": "google.agents",
+      "node_type": "google.agents.GeminiAgent",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "goal",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Goal",
+          "description": "The user prompt"
+        },
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-2.0-flash-exp",
+          "title": "Model",
+          "description": "The Gemini model to use"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "Temperature for sampling",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "task"
+              }
+            ]
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "goal",
+        "model",
+        "temperature"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "SVGGenerator",
+      "description": "Gemini version of SVG generator for creating SVG elements based on user prompts.\n    svg, generator, vector, graphics\n    Use cases:\n    - Creating vector graphics from text descriptions\n    - Generating scalable illustrations\n    - Creating custom icons and diagrams",
+      "namespace": "google.agents",
+      "node_type": "google.agents.SVGGenerator",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-2.0-flash-exp",
+          "title": "Model",
+          "description": "The Gemini model to use"
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The user prompt for SVG generation"
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "Image to use for generation"
+        },
+        {
+          "name": "audio",
+          "type": {
+            "type": "audio"
+          },
+          "default": {},
+          "title": "Audio",
+          "description": "Audio to use for generation"
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "Temperature for sampling",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "svg_element"
+              }
+            ]
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "image",
+        "audio"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Summarizer",
+      "description": "Gemini version of the summarizer for creating concise summaries of text content.\n    text, summarization, nlp, content\n    Use cases:\n    - Condensing long documents into key points\n    - Creating executive summaries\n    - Extracting main ideas from text",
+      "namespace": "google.agents",
+      "node_type": "google.agents.Summarizer",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "model",
+          "type": {
+            "type": "enum",
+            "values": [
+              "gemini-1.5-pro",
+              "gemini-1.5-flash",
+              "gemini-2.0-flash-exp"
+            ],
+            "type_name": "nodetool.nodes.google.gemini.GeminiModel"
+          },
+          "default": "gemini-2.0-flash-exp",
+          "title": "Model",
+          "description": "The Gemini model to use"
+        },
+        {
+          "name": "text",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text",
+          "description": "The text to summarize"
+        },
+        {
+          "name": "max_words",
+          "type": {
+            "type": "int"
+          },
+          "default": 150,
+          "title": "Max Words",
+          "description": "Target maximum number of words for the summary",
+          "min": 50.0,
+          "max": 500.0
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.0,
+          "title": "Temperature",
+          "description": "Temperature for sampling",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "text",
+        "max_words"
+      ],
+      "is_dynamic": false
+    }
+  ]
+}
